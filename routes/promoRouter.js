@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 
 const Promotions = require('../models/promotions');
 
-const promotionRouter = express.Router();
+const promoRouter = express.Router();
 
-promotionRouter.use(bodyParser.json());
+promoRouter.use(bodyParser.json());
 
 // chained actions
 
-promotionRouter.route('/')
+promoRouter.route('/')
 .get((req,res,next) => {
     Promotions.find({})
     .then((promotions) => {
@@ -44,7 +44,7 @@ promotionRouter.route('/')
     .catch((err) => next(err));    
 });
 
-promotionRouter.route('/:promoId')
+promoRouter.route('/:promoId')
 .get((req,res,next) => {
     Promotions.findById(req.params.promoId)
     .then((promotion) => {
@@ -79,4 +79,4 @@ promotionRouter.route('/:promoId')
     .catch((err) => next(err));
 });
 
-module.exports = promotionRouter;
+module.exports = promoRouter;
