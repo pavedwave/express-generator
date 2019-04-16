@@ -40,7 +40,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));   // Muppalla's is bodyParser, not express...
 
-// removed on "Exercise (Video): User Authentication with Passport and JSON Web Token"
+// Mupalla removed on "Exercise (Video): User Authentication with Passport and JSON Web Token"
 
 /* app.use(session({
   name: 'session-id',
@@ -51,7 +51,7 @@ app.use(express.urlencoded({ extended: false }));   // Muppalla's is bodyParser,
 })); */
 
 app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.session());
 
 // removed on "Exercise (Video): User Authentication with Passport and JSON Web Token"
 
@@ -79,14 +79,14 @@ app.use('/leaders', leaderRouter);
   else {
         next();
   }
-}
+}  */
 
-app.use(auth); */
+// app.use(auth); 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+/* app.use(function(req, res, next) {
   next(createError(404));
-});
+}); */
 
 // error handler
 app.use(function(err, req, res, next) {

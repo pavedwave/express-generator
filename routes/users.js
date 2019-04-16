@@ -12,22 +12,15 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(cookieParser());
 
 /* GET users listing. */
-router.all('/',(req, res) => {	
 
-	let pars = (Object.keys(req.body).length > 0)?req.body:req.query;
-    res.send(pars);
-})
-.get('/', (req, res, next) => {	
-	console.log('Cookies: ', req.cookies)
-
-	// Cookies that have been signed
-	console.log('Signed Cookies: ', req.signedCookies)
-})
-.post('/', (req, res, next) => {	  
-	res.send(
-	  req.query.id + ' ' 
-	+ req.query.token + ' ' 
-	+ req.query.geo);
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+	User.find({})
+    .then((users) => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(users);
+    }, (err) => next(err))
+    .catch((err) => next(err));
 });
 
 router.post('/signup', (req, res, next) => {
@@ -66,11 +59,11 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 	var token = authenticate.getToken({_id: req.user._id});
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-	// res.json({success: true, status: 'You are successfully logged in!'});  COOKIE logic
-	res.json({success: true, token: token, status: 'You are successfully logged in!'});  // TOKEN logic
+	// res.json({success: true, status: 'You are successfully logged in!'});                   COOKIE logic
+	res.json({success: true, token: token, status: 'You are successfully logged in!'});  //    TOKEN logic
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
 	if (req.session) {
 		req.session.destroy();
 		res.clearCookie('session-id');
